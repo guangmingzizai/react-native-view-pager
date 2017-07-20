@@ -63,7 +63,7 @@ export default class FlatListViewPager extends Component {
         }
       } else {
         const curX = this.scroller.getCurrX();
-        this.refs['innerListView'].scrollToOffset({offset: curX, animated: false});
+        this.innerListView.scrollToOffset({offset: curX, animated: false});
 
         let position = Math.floor(curX / (this.state.width + this.props.pageMargin));
         position = this.validPage(position);
@@ -107,6 +107,12 @@ export default class FlatListViewPager extends Component {
     }
   }
 
+  componentWillReceiveProps(newProps) {
+      this.setState(() => ({
+          pageDataArray: newProps.pageDataArray,
+      }));
+  }
+
   render() {
     this.pageCount = this.state.pageDataArray.length
 
@@ -122,7 +128,7 @@ export default class FlatListViewPager extends Component {
         {...gestureResponder}>
         <FlatList
           style={{flex: 1}}
-          ref='innerListView'
+          ref={c => {this.innerListView = c}}
           scrollEnabled={false}
           horizontal={true}
           data={this.state.pageDataArray}
@@ -131,7 +137,8 @@ export default class FlatListViewPager extends Component {
           onLayout={this.onLayout.bind(this)}
           legacyImplementation={false}
           debug={false}
-          disableVirtualization={true}
+          extraData={this.state.pageDataArray}
+          disableVirtualization={false}
           viewabilityConfig={FLAT_LIST_VIEWABILITY_CONFIG}
         />
       </View>
