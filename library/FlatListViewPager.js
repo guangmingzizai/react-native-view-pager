@@ -89,6 +89,12 @@ export default class FlatListViewPager extends Component {
     });
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      pageDataArray: nextProps.pageDataArray,
+    })
+  }
+
   onResponderGrant(evt, gestureState) {
     this.scroller.forceFinished(true);
     this.activeGesture = true;
